@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/patient/search" name="GetPatientDetails" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="POST">
+        <inSequence>
+            <log level="full"/>
+            <!-- Extracting email from JSON body -->
+            <property expression="json-eval($.email)" name="patient_email" scope="default" type="STRING"/>
+            <log description="Request Log" level="custom">
+                <property expression="get-property('patient_email')" name="patient_email"/>
+            </log>
+            <!-- 
+            	<property expression="concat(substring-before(get-property('patient_email'), '@'), '%40', substring-after(get-property('patient_email'), '@'))" name="patient_email_encoded" scope="default" type="STRING"/>
+            
+	            <log description="Request Log" level="custom">
+	                <property name="patient_email" expression="get-property('patient_email_encoded')"/>
+	            </log>
+             -->
+            <!-- Invoking the endpoint with the extracted email as a query parameter -->
+            <call>
+                <endpoint name="GetPatientEP">
+                    <http method="get" uri-template="http://localhost:9090/patient/search?email=kavi">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <!-- Extracting the response body -->
+            <property expression="$body" name="response_body" scope="default" type="STRING"/>
+            <log description="Request Log" level="custom">
+                <property name="Log Property message" value="&quot;***************&quot;"/>
+            </log>
+            <log level="full" separator=",">
+                <property expression="$body" name="response_body"/>
+            </log>
+            <log description="Request Log" level="custom">
+                <property name="Log Property message" value="&quot;***************&quot;"/>
+            </log>
+            <!-- Determine the user role based on API Manager scopes -->
+            <property expression="$ctx:AM_KEY_SCOPE" name="user_scopes" scope="default" type="STRING"/>
+            <!-- Extracting the response body -->
+            <property expression="$body" name="response_body" scope="default" type="STRING"/>
+            <!-- Determine the user role based on API Manager scopes -->
+            <property expression="$ctx:AM_KEY_SCOPE" name="user_scopes" scope="default" type="STRING"/>
+            <!-- Transform the response based on user role -->
+            <filter regex="" source="">
+                <then>
+                    <payloadFactory media-type="json">
+                        <format>{"id": "$.id", "name": "$.name", "email": "$.email", "dateOfBirth": "$.dateOfBirth"}</format>
+                        <args/>
+                    </payloadFactory>
+                </then>
+                <else>
+                    <payloadFactory media-type="json">
+                        <format>$1</format>
+                        <args>
+                            <arg evaluator="json" expression="get-property('response_body')"/>
+                        </args>
+                    </payloadFactory>
+                </else>
+            </filter>
+            <!-- Set the response payload -->
+            <property expression="$body" name="message" scope="default" type="STRING"/>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+</api>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/patient" name="AddPatientAPI" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="POST" uri-template="/addpatient">
+        <inSequence>
+            <log description="Request Log" level="custom">
+                <property name="Log Property message" value="&quot;EI Endpoint&quot;"/>
+            </log>
+            <log level="custom">
+                <property expression="$trp:Authorization" name="oneHeader"/>
+            </log>
+            <call>
+                <endpoint key="AddPatientEP"/>
+            </call>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+</api>

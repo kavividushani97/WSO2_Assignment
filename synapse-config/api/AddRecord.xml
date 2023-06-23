@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/record" name="AddRecord" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="POST" uri-template="/addrecord/{patient_id}/history">
+        <inSequence>
+            <log level="full"/>
+            <log description="Request Log" level="custom">
+                <property expression="$ctx:patient_id" name="Log Property message"/>
+            </log>
+            <property expression="$ctx:patient_id" name="patient_id" scope="default" type="STRING"/>
+            <call>
+                <endpoint key="AddRecordEP"/>
+            </call>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+</api>

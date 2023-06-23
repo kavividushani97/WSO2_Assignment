@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/delete" name="Delete" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="DELETE" uri-template="/{patient_id}">
+        <inSequence>
+            <!--    		    <property expression="get-property('uri.var.patient_id')" name="patient_id" scope="default" type="STRING"/>
+ -->
+            <log description="Request Log" level="custom">
+                <property expression="get-property('uri.var.patient_id')" name="Log_Property_message"/>
+            </log>
+            <call>
+                <endpoint key="DeletePatientEP"/>
+            </call>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+</api>
