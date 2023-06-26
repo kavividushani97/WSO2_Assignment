@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/ehealth" name="eHealthAPI" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="POST" uri-template="/patient">
+        <inSequence>
+            <log description="Request Log" level="custom">
+                <property name="Log Property message" value="&quot;EI Endpoint&quot;"/>
+            </log>
+            <log level="custom">
+                <property expression="$trp:Authorization" name="oneHeader"/>
+            </log>
+            <log level="full"/>
+            <call>
+                <endpoint name="AddPatientEP">
+                    <http method="post" uri-template="http://localhost:9090/patient">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="POST" uri-template="/patient/{patient_id}/history">
+        <inSequence>
+            <log level="full"/>
+            <log description="Request Log" level="custom">
+                <property expression="$ctx:patient_id" name="Log Property message"/>
+            </log>
+            <property expression="$ctx:patient_id" name="patient_id" scope="default" type="STRING"/>
+            <call>
+                <endpoint name="AddPatientRecordEP">
+                    <http method="post" uri-template="http://localhost:9090/patient/{uri.var.patient_id}/history">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/patient/{patient_id}">
+        <inSequence>
+            <log description="Request Log" level="custom">
+                <property expression="get-property('uri.var.patient_id')" name="Log_Property_message"/>
+            </log>
+            <call>
+                <endpoint name="GetPatientEP">
+                    <http method="get" uri-template="http://localhost:9090/patient/{uri.var.patient_id}">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="DELETE" uri-template="/patient/{patient_id}">
+        <inSequence>
+            <log description="Request Log" level="custom">
+                <property expression="get-property('uri.var.patient_id')" name="Log_Property_message"/>
+            </log>
+            <call>
+                <endpoint name="DeletePatientEP">
+                    <http method="delete" uri-template="http://localhost:9090/patient/{uri.var.patient_id}">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="DELETE" uri-template="/patient/{patient_id}/history/{medical_record_id}">
+        <inSequence>
+            <log description="Request Log" level="custom">
+                <property expression="get-property('uri.var.patient_id')" name="Log_Property_message"/>
+                <property expression="get-property('uri.var.medical_record_id')" name="Log_Property_message"/>
+            </log>
+            <call>
+                <endpoint name="DeletePatientEP">
+                    <http method="delete" uri-template="http://localhost:9090/patient/{uri.var.patient_id}/history/{uri.var.medical_record_id}">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/getlist/medicine">
+        <inSequence>
+            <log description="Request Log" level="custom">
+                <property name="Log Property message" value="&quot;##############&quot;"/>
+            </log>
+            <log level="full"/>
+            <log description="Request Log" level="custom">
+                <property name="Log Property message" value="&quot;#############&quot;"/>
+            </log>
+            <call>
+                <endpoint name="GetMedicineListEP">
+                    <http method="get" uri-template="http://localhost:9090/medicine">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log description="Request Log" level="custom">
+                <property name="Log Property message" value="&quot;*************&quot;"/>
+            </log>
+            <log level="full"/>
+            <log description="Request Log" level="custom">
+                <property name="Log Property message" value="&quot;*************&quot;"/>
+            </log>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/doctorService/getAllDoctors">
+        <inSequence>
+            <call>
+                <endpoint name="GetDoctorListtEP">
+                    <http method="get" uri-template="http://localhost:9090/doctorService/getAllDoctors">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/patient/search/{patient_email}">
+        <inSequence>
+            <log description="Request Log" level="custom">
+                <property expression="get-property('uri.var.patient_id')" name="Log_Property_message"/>
+            </log>
+            <call>
+                <endpoint name="SearchPatientEP">
+                    <http method="get" uri-template="http://localhost:9090/patient/search?email={uri.var.patient_email}">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <!-- ********************** Add Patient *********************** -->
+    <!-- ********************** Add Patient Record *********************** -->
+    <!-- ********************** Get Patient *********************** -->
+    <!-- ********************** Delete Patient *********************** -->
+    <!-- ********************** Delete Record *********************** -->
+    <!-- ********************** Get Medicine List *********************** -->
+    <!-- ********************** Get Doctor List *********************** -->
+    <!-- ********************** Search Patient *********************** -->
+</api>

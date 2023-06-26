@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/medi" name="getMediList" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="GET" uri-template="/getmedilist">
+        <inSequence>
+            <log description="Request Log" level="custom">
+                <property name="Log Property message" value="&quot;##############&quot;"/>
+            </log>
+            <log level="full"/>
+            <log description="Request Log" level="custom">
+                <property name="Log Property message" value="&quot;#############&quot;"/>
+            </log>
+            <call>
+                <endpoint name="GetMedicineListEP">
+                    <http method="get" uri-template="http://localhost:9090/medicine">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log description="Request Log" level="custom">
+                <property name="Log Property message" value="&quot;*************&quot;"/>
+            </log>
+            <log level="full"/>
+            <log description="Request Log" level="custom">
+                <property name="Log Property message" value="&quot;*************&quot;"/>
+            </log>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+</api>

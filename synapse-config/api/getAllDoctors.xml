@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/getdoc" name="getAllDoctors" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="GET" uri-template="getdoc">
+        <inSequence>
+            <call>
+                <endpoint name="GetDoctorListtEP">
+                    <http method="get" uri-template="http://localhost:9090/doctorService/getAllDoctors">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+</api>
